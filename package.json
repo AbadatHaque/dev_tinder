@@ -1,0 +1,22 @@
+{
+  "name": "dev_tinder",
+  "version": "1.0.0",
+  "description": "Learning node js with aksay saini and making a project ",
+  "main": "app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev":"nodemon src/app.js"
+  },
+  "keywords": [
+    "node",
+    "javascrit"
+  ],
+  "author": "Sk abadat haque",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.6"
+  }
+}
