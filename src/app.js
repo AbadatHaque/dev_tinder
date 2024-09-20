@@ -11,9 +11,18 @@ app.get('/', (req,res)=>{
 })
 app.get('/list',(req,res)=>{
     console.log('here is your all list');
-    res.send('here is dur all list')
-});
+    res.send('here is your all list')
+})
+app.post('/add',(req,res)=>{
+    res.send('Add successfully')
+})
+app.put('/replace',(req,res)=>{
+    res.send('All data replace successfully')
+})
+app.patch('/update',(req,res)=>{
+    res.send('Update successfully')
+})
 
-
-
-console.log('run node js')
+app.delete('/delete',(req,res)=>{
+    res.send('delete user successfully')
+})
