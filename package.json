@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev":"nodemon src/app.js"
+    "dev": "nodemon src/app.js"
   },
   "keywords": [
     "node",
@@ -14,7 +14,8 @@
   "author": "Sk abadat haque",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.0"
+    "express": "^4.21.0",
+    "mongoose": "^8.6.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.6"
