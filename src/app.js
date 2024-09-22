@@ -13,14 +13,10 @@ connectDb().then(()=>{
     console.error('Got error', err);
 })
 
+app.use(express.json())
+
 app.post('/singup',async (req,res)=>{
-    const singUpData = {
-        name:'Rohit sharma',
-        age:37,
-        gender:'male',
-        email:'rohit@gmail.com'
-    };
-    const userSingUpData = new userSchema(singUpData);
+    const userSingUpData = new userSchema(req.body);
     try{
         await userSingUpData.save();
         res.send('successfully add data')
@@ -29,37 +25,32 @@ app.post('/singup',async (req,res)=>{
     }
 })
 
-
-
-
-app.get('/', (req,res)=>{
-    // throw new Error('i am error');
-    console.log('from get root')
-    res.send('Now u r in root path')
-})
-app.use('/',(err,req,res,next)=>{
-    console.log('hey i am from use');
-    if(err){
-        console.error(' i got error')
-        // return false
+app.get('/feed',async (req,res)=>{
+    try{
+        const feedData = await userSchema.find({});
+        res.send(feedData)
+    }catch(err){
+        res.status(400).send('Not able to get feed data');
     }
-    // next()
 })
 
-// app.get('/list',(req,res)=>{
-//     console.log('here is your all list');
-//     res.send('here is your all list')
-// })
-// app.post('/add',(req,res)=>{
-//     res.send('Add successfully')
-// })
-// app.put('/replace',(req,res)=>{
-//     res.send('All data replace successfully')
-// })
-// app.patch('/update',(req,res)=>{
-//     res.send('Update successfully')
-// })
 
-app.delete('/delete',(req,res)=>{
-    res.send('delete user successfully')
+app.delete('/delete',async(req,res)=>{
+    const userId = req.body.id;
+    try{
+        const data = await userSchema.findOneAndDelete({_id:userId});
+        res.send(data);
+    }catch(err){
+        res.status(400).send('Got error to delete user .')
+    }
 })
+
+app.patch('/update', async(req,res)=>{
+    try{
+        const updateDate = await userSchema.findOneAndUpdate(req.body.findBy,req.body.apply,{new:true} );
+        res.send(updateDate)
+    }catch(err){
+        console.error('Got error to update Profile')
+    }
+})
+
