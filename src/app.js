@@ -21,7 +21,7 @@ app.post('/singup',async (req,res)=>{
         await userSingUpData.save();
         res.send('successfully add data')
     }catch(err){
-        res.status('500').send('Unsuccess to add data')
+        res.status('500').send('Unsuccess to add data' + err)
     }
 })
 
