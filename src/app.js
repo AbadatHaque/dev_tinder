@@ -2,8 +2,11 @@ const express = require('express');
 const connectDb = require('./config/database.js')
 const userSchema = require('./models/user.js')
 const {singUpValidation,passwordValidation,matchPassword} = require('./utils/validations.js')
-
+const jwt = require("jsonwebtoken")
 const app =express();
+const privateKey = 'privateKey123'
+const cookieParser = require("cookie-parser")
+const {tokenValidation} = require("./middleware/auth0.js")
 // CONNECT TO DB;
 connectDb().then(()=>{
     // Run Server
@@ -14,7 +17,8 @@ connectDb().then(()=>{
     console.error('Got error', err);
 })
 
-app.use(express.json())
+app.use(express.json());
+app.use(cookieParser())
 
 app.post('/singup',async (req,res)=>{
     try{
@@ -35,15 +39,20 @@ app.post('/login',async (req,res)=>{
             throw new Error('User cradential wrong');
         }
         await  matchPassword(user.password,req.body.password);
+       const token =  jwt.sign({_id:user._id},privateKey,{expiresIn:'1d'} );
+       console.log(token)
+       res.cookie("token", token)
         res.send('Successfully login')
     }catch(err){
         res.status(400).send('err is' + err)
     }
 })
 
-app.get('/feed',async (req,res)=>{
+app.get('/feed',tokenValidation,async (req,res)=>{
     try{
         const feedData = await userSchema.find({});
+        const cookies = req.cookies
+        console.log(cookies, 'cookies')
         res.send(feedData)
     }catch(err){
         res.status(400).send('Not able to get feed data');
