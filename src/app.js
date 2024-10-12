@@ -52,7 +52,6 @@ app.get('/feed',tokenValidation,async (req,res)=>{
     try{
         const feedData = await userSchema.find({});
         const cookies = req.cookies
-        console.log(cookies, 'cookies')
         res.send(feedData)
     }catch(err){
         res.status(400).send('Not able to get feed data');
