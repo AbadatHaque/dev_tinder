@@ -3,6 +3,7 @@ const connectDb = require('./config/database.js')
 const userSchema = require('./models/user.js')
 const app =express();
 const authApi = require('./router/authApi.js')
+const profileApi = require('./router/profileApi.js')
 
 
 const cookieParser = require("cookie-parser")
@@ -16,7 +17,8 @@ connectDb().then(()=>{
 }).catch((err)=>{
     console.error('Got error', err);
 })
-app.use('/',authApi)
+app.use('/',authApi);
+app.use('/',profileApi)
 app.use(cookieParser())
 
 // app.post('/singup',async (req,res)=>{
@@ -47,15 +49,15 @@ app.use(cookieParser())
 //     }
 // })
 
-app.get('/feed',tokenValidation,async (req,res)=>{
-    try{
-        const feedData = await userSchema.find({});
-        const cookies = req.cookies
-        res.send(feedData)
-    }catch(err){
-        res.status(400).send('Not able to get feed data');
-    }
-})
+// app.get('/feed',tokenValidation,async (req,res)=>{
+//     try{
+//         const feedData = await  .find({});
+//         const cookies = req.cookies
+//         res.send(feedData)
+//     }catch(err){
+//         res.status(400).send('Not able to get feed data');
+//     }
+// })
 
 
 app.delete('/delete',async(req,res)=>{

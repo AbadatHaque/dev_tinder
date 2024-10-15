@@ -28,7 +28,6 @@ authRouter.post('/singup',async (req,res)=>{
 })
 
 // Log in Api
-
 authRouter.post('/login',async (req,res)=>{
     try{
         //  get user from db by email  - check password match
@@ -40,10 +39,24 @@ authRouter.post('/login',async (req,res)=>{
         };
         await matchPassword(user.password,password);
         const token =  await jwt.sign({_id:user._id}, privateKey,{expiresIn:'1d'})
-        res.cookie("token",token).json({message: user.name+' Contratulation you are login'})
+        res.cookie("token",token)
+        res.json({message: user.name+' Congratulation you are login'})
     }catch(err){
         res.status(400).json({message:err.message|err })
     }
 })
+
+// Log out message
+authRouter.post('/logout',async (req,res)=>{
+    try{
+        // check authenticate -  expire token - 
+        res.cookie("token", null,{
+            expires: new Date(Date.now())
+        }).json({message:'You are logout'})
+    }catch(err){
+        res.status(400).json({message:'Something is wrong'+ err})
+    }
+})
+
 
 module.exports = authRouter;
