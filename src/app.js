@@ -1,10 +1,10 @@
 const express = require('express');
 const connectDb = require('./config/database.js')
 const userSchema = require('./models/user.js')
-const {singUpValidation,passwordValidation,matchPassword} = require('./utils/validations.js')
-const jwt = require("jsonwebtoken")
 const app =express();
-const privateKey = 'privateKey123'
+const authApi = require('./router/authApi.js')
+
+
 const cookieParser = require("cookie-parser")
 const {tokenValidation} = require("./middleware/auth0.js")
 // CONNECT TO DB;
@@ -16,37 +16,36 @@ connectDb().then(()=>{
 }).catch((err)=>{
     console.error('Got error', err);
 })
-
-app.use(express.json());
+app.use('/',authApi)
 app.use(cookieParser())
 
-app.post('/singup',async (req,res)=>{
-    try{
-        singUpValidation(req.body)
-       const password = await passwordValidation(req.body.password);
-       req.body.password = password;
-        const userSingUpData = new userSchema(req.body);
-        await userSingUpData.save();
-        res.send('successfully add data')
-    }catch(err){
-        res.status('500').send('Unsuccess to add data' + err)
-    }
-})
-app.post('/login',async (req,res)=>{
-    try{
-        const user = await userSchema.findOne({email:req.body.email});
-        if(!user){
-            throw new Error('User cradential wrong');
-        }
-        await  matchPassword(user.password,req.body.password);
-       const token =  jwt.sign({_id:user._id},privateKey,{expiresIn:'1d'} );
-       console.log(token)
-       res.cookie("token", token)
-        res.send('Successfully login')
-    }catch(err){
-        res.status(400).send('err is' + err)
-    }
-})
+// app.post('/singup',async (req,res)=>{
+//     try{
+//         singUpValidation(req.body)
+//        const password = await passwordValidation(req.body.password);
+//        req.body.password = password;
+//         const userSingUpData = new userSchema(req.body);
+//         await userSingUpData.save();
+//         res.send('successfully add data')
+//     }catch(err){
+//         res.status('500').send('Unsuccess to add data' + err)
+//     }
+// })
+// app.post('/login',async (req,res)=>{
+//     try{
+//         const user = await userSchema.findOne({email:req.body.email});
+//         if(!user){
+//             throw new Error('User cradential wrong');
+//         }
+//         await  matchPassword(user.password,req.body.password);
+//        const token =  jwt.sign({_id:user._id},privateKey,{expiresIn:'1d'} );
+//        console.log(token)
+//        res.cookie("token", token)
+//         res.send('Successfully login')
+//     }catch(err){
+//         res.status(400).send('err is' + err)
+//     }
+// })
 
 app.get('/feed',tokenValidation,async (req,res)=>{
     try{

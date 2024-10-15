@@ -1,15 +1,14 @@
 const validator = require('validator')
 const bcrypt =require('bcrypt');
 const saltRounds = 10;
-function singUpValidation(req){
-    const {password} = req;
+function isStringPassword(password){
     if(!validator.isStrongPassword(password)){
         throw new Error('Password is not strong.')
     }
 }
 
 // Encrypt password
-async function  passwordValidation(password){
+async function  encriptPassword(password){
    return await bcrypt.hash(password,saltRounds)
 }
 // match password
@@ -20,4 +19,4 @@ async function matchPassword(hash,newPassword){
     }
 }
 
-module.exports = {singUpValidation,passwordValidation,matchPassword}
+module.exports = {isStringPassword,encriptPassword,matchPassword}
