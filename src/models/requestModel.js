@@ -18,4 +18,4 @@ const requestSchema = new Schema({
         }
     }
 });
-module.exports = moongose.module('request',requestSchema)
+module.exports = moongose.model('request',requestSchema)
