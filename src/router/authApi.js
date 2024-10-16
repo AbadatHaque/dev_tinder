@@ -4,8 +4,11 @@ const {isStringPassword,encriptPassword, matchPassword} = require("../utils/vali
 const userSchema = require("../models/user")
 const jwt = require("jsonwebtoken")
 const privateKey = 'privateKey123'
+const {tokenValidation} = require("../middleware/auth0")
+const cookieParser = require('cookie-parser')
 
 authRouter.use(express.json());
+authRouter.use(cookieParser())
 // Sing up Api
 authRouter.post('/singup',async (req,res)=>{
     try{
@@ -47,7 +50,7 @@ authRouter.post('/login',async (req,res)=>{
 })
 
 // Log out message
-authRouter.post('/logout',async (req,res)=>{
+authRouter.post('/logout',tokenValidation,async (req,res)=>{
     try{
         // check authenticate -  expire token - 
         res.cookie("token", null,{

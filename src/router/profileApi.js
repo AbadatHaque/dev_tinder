@@ -1,10 +1,11 @@
 const express = require("express");
 const userSchema = require('../models/user');
 const {tokenValidation} = require("../middleware/auth0")
+const cookieParser = require("cookie-parser")
 const profileApi = express();
 
 profileApi.use(express.json())
-
+profileApi.use(cookieParser())
 
 profileApi.post('/profile/view',tokenValidation,async(req,res)=>{
     try{
