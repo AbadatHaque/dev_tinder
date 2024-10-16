@@ -28,16 +28,13 @@ profileApi.patch('/profile/edit',tokenValidation,async (req,res)=>{
        const editableKeys= ['age','name','id','gender'];
         const {id} = req.body;
         const user = await userSchema.findById(id);
-        console.log(user)
         if(!user){
             throw new Error('User not found .');
         };
        const isWrongKeyUpdate = Object.keys(req.body).every((item)=> editableKeys.includes(item));
-       console.log(isWrongKeyUpdate) 
        if(!isWrongKeyUpdate){
             throw new Error('Wrong key update')
         }
-       
         await userSchema.findByIdAndUpdate(id,req.body);
         res.json({'message': 'Successfully updte user details'})
     }catch(err){

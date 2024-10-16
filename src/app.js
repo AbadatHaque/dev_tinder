@@ -3,11 +3,11 @@ const connectDb = require('./config/database.js')
 const userSchema = require('./models/user.js')
 const app =express();
 const authApi = require('./router/authApi.js')
-const profileApi = require('./router/profileApi.js')
+const profileApi = require('./router/profileApi.js');
+const requestApi = require("./router/requestApi.js")
 
 
 const cookieParser = require("cookie-parser")
-const {tokenValidation} = require("./middleware/auth0.js")
 // CONNECT TO DB;
 connectDb().then(()=>{
     // Run Server
@@ -18,8 +18,16 @@ connectDb().then(()=>{
     console.error('Got error', err);
 })
 app.use('/',authApi);
-app.use('/',profileApi)
+app.use('/',profileApi);
+app.use('/',requestApi)
 app.use(cookieParser())
+
+
+
+
+
+
+
 
 // app.post('/singup',async (req,res)=>{
 //     try{
@@ -49,15 +57,15 @@ app.use(cookieParser())
 //     }
 // })
 
-// app.get('/feed',tokenValidation,async (req,res)=>{
-//     try{
-//         const feedData = await  .find({});
-//         const cookies = req.cookies
-//         res.send(feedData)
-//     }catch(err){
-//         res.status(400).send('Not able to get feed data');
-//     }
-// })
+    // app.get('/feed',tokenValidation,async (req,res)=>{
+    //     try{
+    //         const feedData = await  .find({});
+    //         const cookies = req.cookies
+    //         res.send(feedData)
+    //     }catch(err){
+    //         res.status(400).send('Not able to get feed data');
+    //     }
+    // })
 
 
 app.delete('/delete',async(req,res)=>{
